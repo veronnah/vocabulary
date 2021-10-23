@@ -10,7 +10,7 @@ let btnsDelete;
 localStorage.length < 1 ? words = [] : words = JSON.parse(localStorage.getItem('words'));
 
 const addWordToTable = index => {
-    table.innerHTML += `
+    let wordsRow = `
     <tr>
       <td class="eng-word">${words[index].english}</td>
        <td class="rus-word">${words[index].russian}</td>
@@ -18,6 +18,8 @@ const addWordToTable = index => {
           <button class="btn-delete"></button>
        </td>
     </tr>`;
+    wordsRow += table.innerHTML;
+    table.innerHTML = wordsRow;
 }
 
 words.forEach((element,i) => {
@@ -35,11 +37,13 @@ addButton.addEventListener('click', () => {
             key.classList.remove('error');
         }
         words.push(new CreateWord(engWord.value, rusWord.value));
+        console.log(words);
         localStorage.setItem('words', JSON.stringify(words));
         addWordToTable(words.length - 1);
         engWord.value = null;
         rusWord.value = null;
     }
+    addEventDelete();
 });
 
 function CreateWord(english, russian) {
@@ -56,14 +60,13 @@ const deleteWord = e => {
 }
 
 function addEventDelete() {
-    if(words.length > 0){
         btnsDelete = document.querySelectorAll('.btn-delete');
         for(let btn of btnsDelete){
             btn.addEventListener('click', e => {
                 deleteWord(e);
             }); 
         }
-    }
+    
 }
 
 addEventDelete();

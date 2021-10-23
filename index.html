@@ -7,34 +7,40 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-	<h1>Мой англо-русский словарь</h1>
-
-	<div class="inputs-block">
-		<div class="input-item">
-			<div class="input-item-title">
-				Слово
+	<div class="container">
+		<div class="zigzag"></div>
+		<main class="main">
+			<div class="wrapper">
+				<h1>Мой словарь</h1>
+				<div class="inputs-block">
+					<div class="input-item">
+						<div class="input-item-title">
+							Слово
+						</div>
+						<input type="text" id="eng" class="input">
+					</div>
+					<div class="input-item">
+						<div class="input-item-title">
+							Перевод
+						</div>
+						<input type="text" id="rus" class="input">
+					</div>
+					<div class="btn-wrapper">
+						<button id="add-word-btn">+</button>
+					</div>
+				</div>
 			</div>
-			<input type="text" id="eng" class="input">
-		</div>
-		<div class="input-item">
-			<div class="input-item-title">
-				Перевод
+		
+			<div class="wrapper">
+				<h2>Сохраненные слова:</h2>
+				<div class="table-block">
+					<table id="table">
+					</table>
+				</div>
 			</div>
-			<input type="text" id="rus" class="input">
-		</div>
-		<div class="btn-wrapper">
-			<button id="add-word-btn">Добавить слово</button>
-		</div>
+		</main>
+		<div class="zigzag2"></div>
 	</div>
-
-	<h2>Сохраненные слова:</h2>
-
-	<div class="table-block">
-		<table id="table">
-		</table>
-	</div>
-
-
     <script src="js/main.js"></script>
 </body>
 </html>
