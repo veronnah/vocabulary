@@ -7,11 +7,11 @@ const engWord = document.getElementById('eng'),
 let words;
 let btnsDelete;
 
-localStorage.length < 1 ? words = [] : words = JSON.parse(localStorage.getItem('words'));
+localStorage.getItem('words') ? words = JSON.parse(localStorage.getItem('words')) : words = [];
 
 const addWordToTable = index => {
     let wordsRow = `
-    <tr>
+    <tr data-word-id=${index}>
       <td class="eng-word">${words[index].english}</td>
        <td class="rus-word">${words[index].russian}</td>
         <td>
@@ -20,9 +20,10 @@ const addWordToTable = index => {
     </tr>`;
     wordsRow += table.innerHTML;
     table.innerHTML = wordsRow;
+    words[index].id = index;
 }
 
-words.forEach((element,i) => {
+words.forEach((element, i) => {
     addWordToTable(i);
 });
 
@@ -36,8 +37,7 @@ addButton.addEventListener('click', () => {
         for (let key of inputs) {
             key.classList.remove('error');
         }
-        words.push(new CreateWord(engWord.value, rusWord.value));
-        console.log(words);
+        words.push(new CreateWord(engWord.value, rusWord.value, getLastId()));
         localStorage.setItem('words', JSON.stringify(words));
         addWordToTable(words.length - 1);
         engWord.value = null;
@@ -46,27 +46,38 @@ addButton.addEventListener('click', () => {
     addEventDelete();
 });
 
-function CreateWord(english, russian) {
+function getLastId() {
+    let receivedWords = JSON.parse(localStorage.getItem('words'));
+    let currentId = 0;
+    if (receivedWords && receivedWords.length > 0) {
+        currentId = ++receivedWords[receivedWords.length - 1].id;
+    }
+    return currentId;
+}
+
+function CreateWord(english, russian, id) {
     this.english = english;
     this.russian = russian;
+    this.id = id;
 };
 
 const deleteWord = e => {
-    const rowIndex = e.target.parentNode.parentNode.rowIndex; 
-    e.target.parentNode.parentNode.parentNode.remove();
-    words.splice(rowIndex, 1); 
-    localStorage.removeItem('words'); 
-    localStorage.setItem('words', JSON.stringify(words));
+    const clickedElement = e.target.parentNode.parentNode;
+    const currentId = +clickedElement.dataset.wordId;
+    clickedElement.parentNode.remove();
+    let filteredWords = words.filter(e => currentId !== e.id);
+    localStorage.removeItem('words');
+    localStorage.setItem('words', JSON.stringify(filteredWords));
 }
 
 function addEventDelete() {
-        btnsDelete = document.querySelectorAll('.btn-delete');
-        for(let btn of btnsDelete){
-            btn.addEventListener('click', e => {
-                deleteWord(e);
-            }); 
-        }
-    
+    btnsDelete = document.querySelectorAll('.btn-delete');
+    for (let btn of btnsDelete) {
+        btn.addEventListener('click', e => {
+            deleteWord(e);
+        });
+    }
 }
 
+getLastId();
 addEventDelete();
